@@ -40,7 +40,34 @@ def extract_names(filename):
   followed by the name-rank strings in alphabetical order.
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
-  # +++your code here+++
+  input = open(filename, 'rU')
+  body = input.read()
+  input.close()
+
+  # find popularity year
+  match = re.search(r'Popularity\sin\s(\d\d\d\d)', body)
+  if not match:
+    print 'Popularity year not found!'
+    return
+
+  names = []
+  # Popularity in 2008
+  # just take 2008 out of the string
+  year = match.group(1)
+  print year
+  names.append(year)
+
+  tuples = re.findall(r'<td>(\d+)</td><td>(\w+)</td>\<td>(\w+)</td>', body)
+
+
+  for tuple in tuples:
+    (rank, boyname, girlname) = tuple
+    print rank, boyname, girlname
+    names.append(girlname + ' ' + rank)
+    names.append(boyname + ' ' + rank)
+
+  print names
+
   return
 
 
@@ -63,6 +90,9 @@ def main():
   # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
+  for filename in args:
+    print 'parsing ', filename
+    extract_names(filename)
   
 if __name__ == '__main__':
   main()
